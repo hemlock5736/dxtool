@@ -1,0 +1,18 @@
+{
+  "name": "@google-apps-script/google-script",
+  "version": "0.0.0",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "prepare": "npm run build",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "@types/google": "^0.0.0",
+    "@types/google-apps-script": "^1.0.83",
+    "@types/uuid": "^10.0.0"
+  }
+}

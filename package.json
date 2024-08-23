@@ -1,0 +1,47 @@
+{
+  "name": "google-apps-script",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "prepare": "lefthook install",
+    "lint": "eslint . --ext js,ts,jsx,tsx --report-unused-disable-directives --max-warnings 0 --fix",
+    "format": "prettier . --write",
+    "open": "clasp open",
+    "push": "clasp push",
+    "dev": "npm run dev -w packages/frontend",
+    "cp:current": "cpx -v clasp/**/* artifacts",
+    "cp:backend": "cpx -v packages/backend/build/**/* artifacts/build",
+    "cp:frontend": "cpx -v packages/frontend/dist/**/* artifacts/dist",
+    "cp": "run-s cp:*",
+    "build:backend": "npm run build -w packages/backend",
+    "build:frontend:dev": "npm run build:dev -w packages/frontend",
+    "build:frontend:prod": "npm run build:prod -w packages/frontend",
+    "build:dev": "run-s build:backend build:frontend:dev",
+    "build:prod": "run-s build:backend build:frontend:prod",
+    "assemble:dev": "run-s build:dev cp",
+    "assemble:prod": "run-s build:prod cp",
+    "deploy:dev": "run-s assemble:dev push",
+    "deploy:prod": "run-s assemble:prod push",
+    "start": "run-s deploy:dev dev"
+  },
+  "workspaces": [
+    "packages/backend",
+    "packages/frontend",
+    "packages/google",
+    "packages/google-script"
+  ],
+  "devDependencies": {
+    "@google/clasp": "^2.4.2",
+    "@typescript-eslint/eslint-plugin": "^8.2.0",
+    "@typescript-eslint/parser": "^8.2.0",
+    "cpx2": "^7.0.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-unused-imports": "^4.1.3",
+    "lefthook": "^1.7.14",
+    "npm-run-all2": "^6.2.2",
+    "prettier": "^3.3.3",
+    "typescript": "^5.5.4"
+  }
+}
