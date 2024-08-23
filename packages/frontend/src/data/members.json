@@ -1,0 +1,50 @@
+{
+  "001@example.com": {
+    "email": "001@example.com",
+    "id": "a001",
+    "name": "田中太郎",
+    "nameKana": "たなかたろう",
+    "department": "営業部",
+    "position": "なし"
+  },
+  "002@example.com": {
+    "email": "002@example.com",
+    "id": "a002",
+    "name": "鈴木花子",
+    "nameKana": "すずきはなこ",
+    "department": "開発部",
+    "position": "なし"
+  },
+  "003@example.com": {
+    "email": "003@example.com",
+    "id": "a003",
+    "name": "山田次郎",
+    "nameKana": "やまだじろう",
+    "department": "経理部",
+    "position": "副部長"
+  },
+  "004@example.com": {
+    "email": "004@example.com",
+    "id": "a004",
+    "name": "杉本えり",
+    "nameKana": "すぎもとえり",
+    "department": "営業部",
+    "position": "なし"
+  },
+  "005@example.com": {
+    "email": "005@example.com",
+    "id": "a005",
+    "name": "井澤賢治",
+    "nameKana": "いざわけんじ",
+    "department": "開発部",
+    "position": "部長"
+  },
+  "006@example.com": {
+    "email": "006@example.com",
+    "id": "a006",
+    "name": "山形ひろし",
+    "nameKana": "やまがたひろし",
+    "department": "開発部",
+    "position": "なし"
+  }
+}

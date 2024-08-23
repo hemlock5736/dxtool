@@ -1,0 +1,58 @@
+{
+  "k101": {
+    "id": "k101",
+    "category": "normal",
+    "floor": 1,
+    "lat": 100,
+    "lng": 100
+  },
+  "k102": {
+    "id": "k102",
+    "category": "normal",
+    "floor": 1,
+    "lat": 200,
+    "lng": 300
+  },
+  "k103": {
+    "id": "k103",
+    "category": "fixed",
+    "floor": 1,
+    "lat": 600,
+    "lng": 400
+  },
+  "k201": {
+    "id": "k201",
+    "category": "normal",
+    "floor": 2,
+    "lat": 800,
+    "lng": 100
+  },
+  "k202": {
+    "id": "k202",
+    "category": "conference",
+    "floor": 2,
+    "lat": 500,
+    "lng": 200
+  },
+  "k301": {
+    "id": "k301",
+    "category": "fixed",
+    "floor": 3,
+    "lat": 600,
+    "lng": 800
+  },
+  "k302": {
+    "id": "k302",
+    "category": "conference",
+    "floor": 3,
+    "lat": 200,
+    "lng": 500
+  },
+  "k303": {
+    "id": "k303",
+    "category": "conference",
+    "floor": 3,
+    "lat": 700,
+    "lng": 300
+  }
+}

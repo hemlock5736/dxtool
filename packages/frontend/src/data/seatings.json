@@ -1,0 +1,22 @@
+[
+  {
+    "email": "001@example.com",
+    "seatId": "k101"
+  },
+  {
+    "email": "003@example.com",
+    "seatId": "k202"
+  },
+  {
+    "email": "004@example.com",
+    "seatId": "k202"
+  },
+  {
+    "email": "005@example.com",
+    "seatId": "k302"
+  },
+  {
+    "email": "006@example.com",
+    "seatId": "k301"
+  }
+]
