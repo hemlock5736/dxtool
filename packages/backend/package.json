@@ -6,13 +6,8 @@
     "build": "tsc -b && node esbuild.js"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^26.0.1",
-    "@rollup/plugin-node-resolve": "^15.2.3",
-    "@rollup/plugin-typescript": "^11.1.6",
     "@types/google-apps-script": "^1.0.83",
     "esbuild": "^0.23.1",
-    "esbuild-gas-plugin": "^0.8.0",
-    "rollup": "^4.21.0",
-    "tslib": "^2.6.3"
+    "esbuild-gas-plugin": "^0.8.0"
   }
 }
