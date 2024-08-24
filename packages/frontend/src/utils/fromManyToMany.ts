@@ -1,6 +1,6 @@
 type Relation = { [key: string]: string };
-type Relations = Set<Relation>;
-export type Result = { [key: string]: Set<string> };
+type Relations = Relation[];
+export type Result = { [key: string]: string[] };
 
 export const fromManyToMany = (
   relations: Relations,
@@ -10,9 +10,9 @@ export const fromManyToMany = (
   const res: Result = {};
   relations.forEach((relation) => {
     if (!res[relation[key]]) {
-      res[relation[key]] = new Set();
+      res[relation[key]] = [];
     }
-    res[relation[key]].add(relation[value]);
+    res[relation[key]].push(relation[value]);
   });
   return res;
 };

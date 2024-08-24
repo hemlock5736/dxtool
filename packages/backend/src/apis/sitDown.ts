@@ -32,7 +32,7 @@ export function sitDown(seatId: string) {
     })
     .forEach((memberSeatRecordWithIndex) => {
       const index = memberSeatRecordWithIndex.index;
-      memberSeatsSheet.deleteRow(index);
+      memberSeatsSheet.deleteRow(index + 2);
     });
   memberSeatsSheet.appendRow(makeRowContents(memberSeat, columnNames));
 }

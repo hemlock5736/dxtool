@@ -1,27 +1,33 @@
 import { FC, useContext } from "react";
 import { Popup } from "react-leaflet";
 import { SeatingContext } from "../contexts/seating/SeatingContext";
-import { Seat } from "../types/Seat";
+import { Seat } from "@google-apps-script/shared/types/Seat";
+import { GasContext } from "../contexts/gas/GasContext";
 
 type OfficePopupProps = {
   seat: Seat;
 };
 
 export const OfficePopup: FC<OfficePopupProps> = ({ seat }) => {
-  const { seatingState, seatings, seatingDispatch } =
+  const { serverFunctions } = useContext(GasContext);
+  const { seatingState, memberSeatsBy, seatingDispatch } =
     useContext(SeatingContext);
   const members = seatingState.members;
   const email = seatingState.email;
 
-  const emails = seatings.bySeatId[seat.id];
+  const emails = memberSeatsBy.seatId[seat.id];
   const member = emails ? members[[...emails][0]] : undefined;
 
   const handleStandup = () => {
-    seatingDispatch({ type: "standup", email, seatId: seat.id });
+    serverFunctions.leaveSeat(seat.id).then(() => {
+      seatingDispatch({ type: "leaveSeat", email, seatId: seat.id });
+    });
   };
 
   const handleSitdown = () => {
-    seatingDispatch({ type: "sitdown", email, seatId: seat.id });
+    serverFunctions.sitDown(seat.id).then(() => {
+      seatingDispatch({ type: "sitDown", email, seatId: seat.id });
+    });
   };
 
   return (
@@ -32,7 +38,7 @@ export const OfficePopup: FC<OfficePopupProps> = ({ seat }) => {
           <p>{member.name}</p>
           <p>{member.department}</p>
           <p>{member.position}</p>
-          {seatings.bySeatId[seat.id].has(email) ? (
+          {emails.includes(email) ? (
             <button onClick={handleStandup}>standUp</button>
           ) : (
             <></>

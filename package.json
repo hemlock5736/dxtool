@@ -28,7 +28,8 @@
     "packages/backend",
     "packages/frontend",
     "packages/google",
-    "packages/google-script"
+    "packages/google-script",
+    "packages/shared"
   ],
   "devDependencies": {
     "@google/clasp": "^2.4.2",

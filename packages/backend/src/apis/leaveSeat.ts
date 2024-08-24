@@ -21,6 +21,6 @@ export function leaveSeat(seatId: string) {
     )
     .forEach((memberSeatRecordWithIndex) => {
       const index = memberSeatRecordWithIndex.index;
-      memberSeatsSheet.deleteColumn(index);
+      memberSeatsSheet.deleteRow(index + 2);
     });
 }

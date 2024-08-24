@@ -1,5 +1,5 @@
 import { Color } from "../types/Color";
-import { Category } from "../types/Seat";
+import { Category } from "@google-apps-script/shared/types/Seat";
 
 export const categoryColor: Record<Category, Color> = {
   normal: "blue",

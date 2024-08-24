@@ -1,6 +1,6 @@
 import { FC, ReactNode } from "react";
 import { CircleMarker } from "react-leaflet";
-import { Seat } from "../types/Seat";
+import { Seat } from "@google-apps-script/shared/types/Seat";
 import { categoryColor, colorHue } from "../utils/colors";
 
 type VacantSeatMarkerProps = {

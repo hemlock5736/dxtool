@@ -1,27 +1,27 @@
 import { useMemo } from "react";
-import { Seatings } from "../../../types/Seating";
+import { MemberSeats } from "@google-apps-script/shared/types/MemberSeat";
 import { fromManyToMany, Result } from "../../../utils/fromManyToMany";
 
-export type SeatingsBy = {
-  bySeatId: Result;
-  byEmail: Result;
+export type MemberSeatsBy = {
+  seatId: Result;
+  email: Result;
 };
 
-export const initialSeatingBy: SeatingsBy = {
-  bySeatId: {},
-  byEmail: {},
+export const initialMemberSeatsBy: MemberSeatsBy = {
+  seatId: {},
+  email: {},
 };
 
-export const useSeatingsBy = (seatings: Seatings): SeatingsBy => {
+export const useSeatingsBy = (memberSeats: MemberSeats): MemberSeatsBy => {
   const seatingsBySeatId = useMemo(
-    () => fromManyToMany(seatings, "seatId", "email"),
-    [seatings],
+    () => fromManyToMany(memberSeats, "seatId", "email"),
+    [memberSeats],
   );
 
   const seatingsByEmail = useMemo(
-    () => fromManyToMany(seatings, "email", "seatId"),
-    [seatings],
+    () => fromManyToMany(memberSeats, "email", "seatId"),
+    [memberSeats],
   );
 
-  return { bySeatId: seatingsBySeatId, byEmail: seatingsByEmail };
+  return { seatId: seatingsBySeatId, email: seatingsByEmail };
 };

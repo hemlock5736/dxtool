@@ -1,14 +1,17 @@
 import { category } from "../../../constants/category";
-import { Members } from "../../../types/Member";
-import { Seat, Seats } from "../../../types/Seat";
-import { Seating, Seatings } from "../../../types/Seating";
+import { Members } from "@google-apps-script/shared/types/Member";
+import { Seat, Seats } from "@google-apps-script/shared/types/Seat";
+import {
+  MemberSeat,
+  MemberSeats,
+} from "@google-apps-script/shared/types/MemberSeat";
 
 export type SeatingState = {
   members: Members;
   seats: Seats;
-  seatings: Seatings;
+  memberSeats: MemberSeats;
   email: string;
-  filteredSeatIds: Set<string>;
+  filteredSeatIds: string[];
 };
 
 export type SeatingAction =
@@ -17,8 +20,8 @@ export type SeatingAction =
       key: keyof SeatingState;
       value: SeatingState[keyof SeatingState];
     }
-  | { type: "sitdown"; email: string; seatId: string }
-  | { type: "standup"; email: string; seatId: string }
+  | { type: "sitDown"; email: string; seatId: string }
+  | { type: "leaveSeat"; email: string; seatId: string }
   | { type: "filter"; text: string };
 
 export const seatingReducer = (
@@ -32,38 +35,41 @@ export const seatingReducer = (
         [action.key]: action.value,
       };
     }
-    case "standup": {
-      const seatings = new Set(
-        [...(state.seatings ?? [])].filter(
-          (seating) =>
-            seating.email === action.email && seating.seatId === action.seatId,
-        ),
+    case "leaveSeat": {
+      const memberSeats = state.memberSeats.filter(
+        (memberSeat) =>
+          !(
+            memberSeat.email === action.email &&
+            memberSeat.seatId === action.seatId
+          ),
       );
       return {
         ...state,
-        seatings: state.seatings.difference(seatings),
+        memberSeats,
       };
     }
-    case "sitdown": {
-      const seating: Seating = { email: action.email, seatId: action.seatId };
-      const isConference = (seat: Seat) => seat.category === "conference";
-      const isConferenceRoom = isConference(state.seats[action.seatId]);
-      const seatings = new Set(
-        [...(state.seatings ?? [])].filter(
-          (seating) => seating.email === action.email,
-        ),
+    case "sitDown": {
+      const CheckIfConferenceRoom = (seat: Seat) =>
+        seat.category === "conference";
+      const isConferenceRoom = CheckIfConferenceRoom(
+        state.seats[action.seatId],
       );
-      const conferences = new Set(
-        [...(seatings ?? [])].filter((seating) =>
-          isConference(state.seats[seating.seatId]),
-        ),
-      );
-      const offices = seatings.difference(conferences);
+      const memberSeats = state.memberSeats.filter((memberSeat) => {
+        const seat = state.seats[memberSeat.seatId];
+        return !(
+          memberSeat.email === action.email &&
+          (isConferenceRoom
+            ? CheckIfConferenceRoom(seat)
+            : !CheckIfConferenceRoom(seat))
+        );
+      });
+      const memberSeat: MemberSeat = {
+        email: action.email,
+        seatId: action.seatId,
+      };
       return {
         ...state,
-        seatings: state.seatings
-          .difference(isConferenceRoom ? conferences : offices)
-          .add(seating),
+        memberSeats: [...memberSeats, memberSeat],
       };
     }
     case "filter": {
@@ -71,36 +77,29 @@ export const seatingReducer = (
       if (text === "") {
         return {
           ...state,
-          filteredSeatIds: new Set(
-            Object.values(state.seats).map((seat) => seat.id),
-          ),
+          filteredSeatIds: Object.values(state.seats).map((seat) => seat.id),
         };
       }
-      const seatdIds = new Set(
-        Object.values(state.seats)
-          .filter(
-            (seat) =>
-              match(text, seat.id) || match(text, category[seat.category]),
-          )
-          .map((seat) => seat.id),
-      );
-      const emails = new Set(
-        Object.values(state.members)
-          .filter(
-            (member) =>
-              match(text, member.name) ||
-              match(text, member.nameKana) ||
-              match(text, member.department) ||
-              match(text, member.position),
-          )
-          .map((member) => member.email),
-      );
-      const seatIdsFromEmails = new Set(
-        [...(state.seatings ?? [])]
-          .filter((seating) => emails.has(seating.email))
-          .map((seating) => seating.seatId),
-      );
-      return { ...state, filteredSeatIds: seatdIds.union(seatIdsFromEmails) };
+      const seatdIds = Object.values(state.seats)
+        .filter(
+          (seat) =>
+            match(text, seat.id) || match(text, category[seat.category]),
+        )
+        .map((seat) => seat.id);
+      const emails = Object.values(state.members)
+        .filter(
+          (member) =>
+            match(text, member.name) ||
+            match(text, member.nameKana) ||
+            match(text, member.department) ||
+            match(text, member.position),
+        )
+        .map((member) => member.email);
+      const seatIdsFromEmails = state.memberSeats
+        .filter((memberSeat) => emails.includes(memberSeat.email))
+        .map((memberSeat) => memberSeat.seatId);
+      const filteredSeatIds = [...new Set([...seatdIds, ...seatIdsFromEmails])];
+      return { ...state, filteredSeatIds };
     }
   }
 };

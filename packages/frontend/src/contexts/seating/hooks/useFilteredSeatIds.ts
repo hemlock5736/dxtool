@@ -1,5 +1,5 @@
 import { Dispatch, useEffect } from "react";
-import { Seats } from "../../../types/Seat";
+import { Seats } from "@google-apps-script/shared/types/Seat";
 import { SeatingAction } from "../reducers/seatingReducer";
 
 export const useFilteredSeatIds = (
@@ -10,7 +10,7 @@ export const useFilteredSeatIds = (
     dispatch({
       type: "set",
       key: "filteredSeatIds",
-      value: new Set(Object.values(seats).map((seat) => seat.id)),
+      value: Object.values(seats).map((seat) => seat.id),
     });
   }, [dispatch, seats]);
 };

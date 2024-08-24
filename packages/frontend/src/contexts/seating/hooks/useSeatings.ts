@@ -1,5 +1,5 @@
 import { Dispatch, useContext, useEffect } from "react";
-import { Seatings } from "../../../types/Seating";
+import { MemberSeats } from "@google-apps-script/shared/types/MemberSeat";
 import { SeatingAction } from "../reducers/seatingReducer";
 import { GasContext } from "../../gas/GasContext";
 
@@ -9,11 +9,11 @@ export const useSeatings = (dispatch: Dispatch<SeatingAction>) => {
   useEffect(() => {
     serverFunctions
       .getMemberSeats()
-      .then((memberSeats) => {
+      .then((memberSeats: MemberSeats) => {
         dispatch({
           type: "set",
-          key: "seatings",
-          value: new Set(memberSeats) as Seatings,
+          key: "memberSeats",
+          value: memberSeats,
         });
       })
       .catch((err) => {

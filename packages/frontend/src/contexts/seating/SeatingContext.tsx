@@ -4,8 +4,8 @@ import { useFilteredSeatIds } from "./hooks/useFilteredSeatIds";
 import { useMembers } from "./hooks/useMembers";
 import { useSeatings } from "./hooks/useSeatings";
 import {
-  initialSeatingBy,
-  SeatingsBy,
+  initialMemberSeatsBy,
+  MemberSeatsBy,
   useSeatingsBy,
 } from "./hooks/useSeatingsBy";
 import { useSeats } from "./hooks/useSeats";
@@ -17,21 +17,21 @@ import {
 
 type Value = {
   seatingState: SeatingState;
-  seatings: SeatingsBy;
+  memberSeatsBy: MemberSeatsBy;
   seatingDispatch: Dispatch<SeatingAction>;
 };
 
 const initialState: SeatingState = {
   members: {},
   seats: {},
-  seatings: new Set(),
+  memberSeats: [],
   email: "",
-  filteredSeatIds: new Set(),
+  filteredSeatIds: [],
 };
 
 const defaultValue: Value = {
   seatingState: initialState,
-  seatings: initialSeatingBy,
+  memberSeatsBy: initialMemberSeatsBy,
   seatingDispatch: () => {},
 };
 
@@ -45,15 +45,17 @@ export const SeatingContextProvider: FC<{ children: ReactNode }> = ({
     initialState,
   );
 
+  console.log(seatingState);
+
   useMembers(seatingDispatch);
   useSeats(seatingDispatch);
   useSeatings(seatingDispatch);
   useEmail(seatingDispatch);
   useFilteredSeatIds(seatingDispatch, seatingState.seats);
 
-  const value = {
+  const value: Value = {
     seatingState,
-    seatings: useSeatingsBy(seatingState.seatings),
+    memberSeatsBy: useSeatingsBy(seatingState.memberSeats),
     seatingDispatch,
   };
 

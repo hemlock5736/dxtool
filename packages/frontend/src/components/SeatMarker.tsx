@@ -1,6 +1,6 @@
 import { FC, useContext } from "react";
 import { SeatingContext } from "../contexts/seating/SeatingContext";
-import { Seat } from "../types/Seat";
+import { Seat } from "@google-apps-script/shared/types/Seat";
 import { ConferencePopup } from "./ConferencePopup";
 import { OccupiedSeatMarker } from "./OccupiedSeatMarker";
 import { OfficePopup } from "./OfficePopup";
@@ -11,9 +11,9 @@ type SeatMarkerProps = {
 };
 
 export const SeatMarker: FC<SeatMarkerProps> = ({ seat }) => {
-  const { seatingState, seatings } = useContext(SeatingContext);
+  const { seatingState, memberSeatsBy } = useContext(SeatingContext);
 
-  if (!seatingState.filteredSeatIds.has(seat.id)) {
+  if (!seatingState.filteredSeatIds.includes(seat.id)) {
     return;
   }
 
@@ -24,7 +24,7 @@ export const SeatMarker: FC<SeatMarkerProps> = ({ seat }) => {
       <OfficePopup seat={seat} />
     );
 
-  return seatings.bySeatId[seat.id] ? (
+  return memberSeatsBy.seatId[seat.id] ? (
     <OccupiedSeatMarker seat={seat}>{Popup}</OccupiedSeatMarker>
   ) : (
     <VacantSeatMarker seat={seat}>{Popup}</VacantSeatMarker>
