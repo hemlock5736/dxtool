@@ -1,8 +1,8 @@
 import { useContext, useState } from "react";
-import { SeatingContext } from "../contexts/seating/SeatingContext";
+import { FilteredSeatIdsContext } from "../contexts/filteredSeatIds/FilteredSeatIdsContext";
 
 export const SearchBox = () => {
-  const { seatingDispatch } = useContext(SeatingContext);
+  const [, filterSeatIds] = useContext(FilteredSeatIdsContext);
 
   const [text, setText] = useState("");
 
@@ -12,7 +12,7 @@ export const SearchBox = () => {
 
   const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    seatingDispatch({ type: "filter", text });
+    filterSeatIds(text);
   };
 
   return (

@@ -1,6 +1,5 @@
 import { createContext, Dispatch, FC, ReactNode, useReducer } from "react";
 import { useEmail } from "./hooks/useEmail";
-import { useFilteredSeatIds } from "./hooks/useFilteredSeatIds";
 import { useMembers } from "./hooks/useMembers";
 import { useSeatings } from "./hooks/useSeatings";
 import {
@@ -13,6 +12,7 @@ import {
   SeatingAction,
   seatingReducer,
   SeatingState,
+  initialSeatingState,
 } from "./reducers/seatingReducer";
 
 type Value = {
@@ -21,16 +21,8 @@ type Value = {
   seatingDispatch: Dispatch<SeatingAction>;
 };
 
-const initialState: SeatingState = {
-  members: {},
-  seats: {},
-  memberSeats: [],
-  email: "",
-  filteredSeatIds: [],
-};
-
 const defaultValue: Value = {
-  seatingState: initialState,
+  seatingState: initialSeatingState,
   memberSeatsBy: initialMemberSeatsBy,
   seatingDispatch: () => {},
 };
@@ -42,14 +34,13 @@ export const SeatingContextProvider: FC<{ children: ReactNode }> = ({
 }) => {
   const [seatingState, seatingDispatch] = useReducer(
     seatingReducer,
-    initialState,
+    initialSeatingState,
   );
 
   useMembers(seatingDispatch);
   useSeats(seatingDispatch);
   useSeatings(seatingDispatch);
   useEmail(seatingDispatch);
-  useFilteredSeatIds(seatingDispatch, seatingState.seats);
 
   const value: Value = {
     seatingState,
