@@ -1,8 +1,10 @@
 import { useContext, useState } from "react";
 import { FilteredSeatIdsContext } from "../contexts/filteredSeatIds/FilteredSeatIdsContext";
+import { SeatingContext } from "../contexts/seating/SeatingContext";
 
 export const SearchBox = () => {
-  const [, filterSeatIds] = useContext(FilteredSeatIdsContext);
+  const { seatingState } = useContext(SeatingContext);
+  const [, filteredSeatIdsDispatch] = useContext(FilteredSeatIdsContext);
 
   const [text, setText] = useState("");
 
@@ -12,7 +14,13 @@ export const SearchBox = () => {
 
   const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    filterSeatIds(text);
+    filteredSeatIdsDispatch({
+      type: "filter",
+      text,
+      seats: seatingState.seats,
+      members: seatingState.members,
+      memberSeats: seatingState.memberSeats,
+    });
   };
 
   return (
