@@ -1,31 +1,31 @@
-import { createContext, FC, ReactNode, useState } from "react";
-import { useFilter } from "./hooks/useFilter";
-import { useInitialize } from "./hooks/useInitialize";
+import { createContext, Dispatch, FC, ReactNode, useReducer } from "react";
+import { useInitializeFilteredSeatIds } from "./hooks/useInitializeFilteredSeatIds";
+import {
+  FilteredSeatIdsAction,
+  filteredSeatIdsReducer,
+  FilteredSeatIdsState,
+  initialFilteredSeatIdsState,
+} from "./reducers/filteredSeatsReducer";
 
-export type State = string[];
+type Value = [FilteredSeatIdsState, Dispatch<FilteredSeatIdsAction>];
 
-type Value = [State, (text: string) => void];
-
-const initialState: State = [];
-
-const initialValue: Value = [initialState, () => {}];
+const initialValue: Value = [initialFilteredSeatIdsState, () => {}];
 
 export const FilteredSeatIdsContext = createContext<Value>(initialValue);
 
 export const FilteredSeatIdsContextProvider: FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [filteredSeatIds, setFilteredSeatIds] = useState<State>(initialState);
+  const [filteredSeatIds, filteredSeatIdsDispatch] = useReducer(
+    filteredSeatIdsReducer,
+    initialFilteredSeatIdsState,
+  );
 
-  useInitialize(setFilteredSeatIds);
-
-  const useFilterSeatIds = (text: string) => {
-    useFilter(text, setFilteredSeatIds);
-  };
+  useInitializeFilteredSeatIds(filteredSeatIdsDispatch);
 
   return (
     <FilteredSeatIdsContext.Provider
-      value={[filteredSeatIds, useFilterSeatIds]}
+      value={[filteredSeatIds, filteredSeatIdsDispatch]}
     >
       {children}
     </FilteredSeatIdsContext.Provider>
