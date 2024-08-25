@@ -1,10 +1,10 @@
 import { FC, useContext } from "react";
 import { SeatingContext } from "../contexts/seating/SeatingContext";
 import { Seat } from "@google-apps-script/shared/types/Seat";
-import { ConferencePopup } from "./ConferencePopup";
-import { OccupiedSeatMarker } from "./OccupiedSeatMarker";
-import { OfficePopup } from "./OfficePopup";
-import { VacantSeatMarker } from "./VacantSeatMarker";
+import { ConferencePopup } from "./popups/ConferencePopup";
+import { OccupiedSeatMarker } from "./markers/OccupiedSeatMarker";
+import { OfficePopup } from "./popups/OfficePopup";
+import { VacantSeatMarker } from "./markers/VacantSeatMarker";
 
 type SeatMarkerProps = {
   seat: Seat;

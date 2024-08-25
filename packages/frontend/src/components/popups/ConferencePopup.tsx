@@ -1,22 +1,19 @@
 import { FC, useContext } from "react";
 import { Popup } from "react-leaflet";
-import { SeatingContext } from "../contexts/seating/SeatingContext";
+import { SeatingContext } from "../../contexts/seating/SeatingContext";
 import { Seat } from "@google-apps-script/shared/types/Seat";
-import { GasContext } from "../contexts/gas/GasContext";
+import { GasContext } from "../../contexts/gas/GasContext";
 
-type OfficePopupProps = {
+type ConferencePopupProps = {
   seat: Seat;
 };
 
-export const OfficePopup: FC<OfficePopupProps> = ({ seat }) => {
+export const ConferencePopup: FC<ConferencePopupProps> = ({ seat }) => {
   const { serverFunctions } = useContext(GasContext);
   const { seatingState, memberSeatsBy, seatingDispatch } =
     useContext(SeatingContext);
   const members = seatingState.members;
   const email = seatingState.email;
-
-  const emails = memberSeatsBy.seatId[seat.id];
-  const member = emails ? members[[...emails][0]] : undefined;
 
   const handleLeaveSeat = () => {
     serverFunctions.leaveSeat(seat.id).catch(() => {
@@ -34,25 +31,22 @@ export const OfficePopup: FC<OfficePopupProps> = ({ seat }) => {
 
   return (
     <Popup>
-      {member ? (
-        <>
-          <p>{seat.id}</p>
-          <p>{member.name}</p>
-          <p>{member.department}</p>
-          <p>{member.position}</p>
-          {emails.includes(email) ? (
-            <button onClick={handleLeaveSeat}>standUp</button>
-          ) : (
-            <></>
-          )}
-        </>
-      ) : (
-        <>
-          <p>{seat.id}</p>
-          <p>vacant</p>
-          <button onClick={handleSitdown}>sitDown</button>
-        </>
-      )}
+      <p>{seat.id}</p>
+      <div>
+        {memberSeatsBy.seatId[seat.id]?.map((email) => {
+          const member = members[email];
+          return (
+            <div key={email}>
+              <p>{member?.name}</p>
+            </div>
+          );
+        })}
+        {memberSeatsBy.seatId[seat.id]?.includes(email) ? (
+          <button onClick={handleLeaveSeat}>standup</button>
+        ) : (
+          <button onClick={handleSitdown}>sitdown</button>
+        )}
+      </div>
     </Popup>
   );
 };
