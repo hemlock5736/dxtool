@@ -1,36 +1,19 @@
 import { FC, useContext } from "react";
 import { Popup } from "react-leaflet";
 import { SeatingContext } from "../../contexts/seating/SeatingContext";
-import { Seat } from "@google-apps-script/shared/types/Seat";
-import { GasContext } from "../../contexts/gas/GasContext";
+import { BasePopupProps } from "./Popup";
 
-type OfficePopupProps = {
-  seat: Seat;
-};
-
-export const OfficePopup: FC<OfficePopupProps> = ({ seat }) => {
-  const { serverFunctions } = useContext(GasContext);
-  const { seatingState, memberSeatsBy, seatingDispatch } =
-    useContext(SeatingContext);
+export const OfficePopup: FC<BasePopupProps> = ({
+  seat,
+  makeHandleLeaveSeat,
+  makeHandleSitDown,
+}) => {
+  const { seatingState, memberSeatsBy } = useContext(SeatingContext);
   const members = seatingState.members;
   const email = seatingState.email;
 
   const emails = memberSeatsBy.seatId[seat.id];
   const member = emails ? members[[...emails][0]] : undefined;
-
-  const handleLeaveSeat = () => {
-    serverFunctions.leaveSeat(seat.id).catch(() => {
-      seatingDispatch({ type: "sitDown", email, seatId: seat.id });
-    });
-    seatingDispatch({ type: "leaveSeat", email, seatId: seat.id });
-  };
-
-  const handleSitdown = () => {
-    serverFunctions.sitDown(seat.id).catch(() => {
-      seatingDispatch({ type: "leaveSeat", email, seatId: seat.id });
-    });
-    seatingDispatch({ type: "sitDown", email, seatId: seat.id });
-  };
 
   return (
     <Popup>
@@ -41,7 +24,7 @@ export const OfficePopup: FC<OfficePopupProps> = ({ seat }) => {
           <p>{member.department}</p>
           <p>{member.position}</p>
           {emails.includes(email) ? (
-            <button onClick={handleLeaveSeat}>standUp</button>
+            <button onClick={makeHandleLeaveSeat(email)}>standUp</button>
           ) : (
             <></>
           )}
@@ -50,7 +33,7 @@ export const OfficePopup: FC<OfficePopupProps> = ({ seat }) => {
         <>
           <p>{seat.id}</p>
           <p>vacant</p>
-          <button onClick={handleSitdown}>sitDown</button>
+          <button onClick={makeHandleSitDown(email)}>sitDown</button>
         </>
       )}
     </Popup>
