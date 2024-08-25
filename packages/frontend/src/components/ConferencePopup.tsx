@@ -15,16 +15,18 @@ export const ConferencePopup: FC<ConferencePopupProps> = ({ seat }) => {
   const members = seatingState.members;
   const email = seatingState.email;
 
-  const handleStandup = () => {
-    serverFunctions.leaveSeat(seat.id).then(() => {
-      seatingDispatch({ type: "leaveSeat", email, seatId: seat.id });
+  const handleLeaveSeat = () => {
+    serverFunctions.leaveSeat(seat.id).catch(() => {
+      seatingDispatch({ type: "sitDown", email, seatId: seat.id });
     });
+    seatingDispatch({ type: "leaveSeat", email, seatId: seat.id });
   };
 
   const handleSitdown = () => {
-    serverFunctions.sitDown(seat.id).then(() => {
-      seatingDispatch({ type: "sitDown", email, seatId: seat.id });
+    serverFunctions.sitDown(seat.id).catch(() => {
+      seatingDispatch({ type: "leaveSeat", email, seatId: seat.id });
     });
+    seatingDispatch({ type: "sitDown", email, seatId: seat.id });
   };
 
   return (
@@ -40,7 +42,7 @@ export const ConferencePopup: FC<ConferencePopupProps> = ({ seat }) => {
           );
         })}
         {memberSeatsBy.seatId[seat.id]?.includes(email) ? (
-          <button onClick={handleStandup}>standup</button>
+          <button onClick={handleLeaveSeat}>standup</button>
         ) : (
           <button onClick={handleSitdown}>sitdown</button>
         )}

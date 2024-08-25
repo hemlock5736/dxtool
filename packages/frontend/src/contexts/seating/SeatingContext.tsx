@@ -45,8 +45,6 @@ export const SeatingContextProvider: FC<{ children: ReactNode }> = ({
     initialState,
   );
 
-  console.log(seatingState);
-
   useMembers(seatingDispatch);
   useSeats(seatingDispatch);
   useSeatings(seatingDispatch);

@@ -18,16 +18,18 @@ export const OfficePopup: FC<OfficePopupProps> = ({ seat }) => {
   const emails = memberSeatsBy.seatId[seat.id];
   const member = emails ? members[[...emails][0]] : undefined;
 
-  const handleStandup = () => {
-    serverFunctions.leaveSeat(seat.id).then(() => {
-      seatingDispatch({ type: "leaveSeat", email, seatId: seat.id });
+  const handleLeaveSeat = () => {
+    serverFunctions.leaveSeat(seat.id).catch(() => {
+      seatingDispatch({ type: "sitDown", email, seatId: seat.id });
     });
+    seatingDispatch({ type: "leaveSeat", email, seatId: seat.id });
   };
 
   const handleSitdown = () => {
-    serverFunctions.sitDown(seat.id).then(() => {
-      seatingDispatch({ type: "sitDown", email, seatId: seat.id });
+    serverFunctions.sitDown(seat.id).catch(() => {
+      seatingDispatch({ type: "leaveSeat", email, seatId: seat.id });
     });
+    seatingDispatch({ type: "sitDown", email, seatId: seat.id });
   };
 
   return (
@@ -39,7 +41,7 @@ export const OfficePopup: FC<OfficePopupProps> = ({ seat }) => {
           <p>{member.department}</p>
           <p>{member.position}</p>
           {emails.includes(email) ? (
-            <button onClick={handleStandup}>standUp</button>
+            <button onClick={handleLeaveSeat}>standUp</button>
           ) : (
             <></>
           )}

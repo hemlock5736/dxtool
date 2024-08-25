@@ -6,6 +6,9 @@ export function leaveSeat(seatId: string) {
   const memberSeatsSheet = ss.getSheetByName("memberSeats");
   if (!memberSeatsSheet) return;
 
+  const lock = LockService.getDocumentLock();
+  lock.waitLock(30000);
+
   const email = getEmail();
   const [memberSeatRecords] = getMemberSeatRecords();
 
@@ -23,4 +26,6 @@ export function leaveSeat(seatId: string) {
       const index = memberSeatRecordWithIndex.index;
       memberSeatsSheet.deleteRow(index + 2);
     });
+
+  lock.releaseLock();
 }

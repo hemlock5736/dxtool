@@ -10,6 +10,9 @@ export function sitDown(seatId: string) {
   const memberSeatsSheet = ss.getSheetByName("memberSeats");
   if (!memberSeatsSheet) return;
 
+  const lock = LockService.getDocumentLock();
+  lock.waitLock(30000);
+
   const email = getEmail();
   const seats = getSeats();
   const [memberSeatRecords, columnNames] = getMemberSeatRecords();
@@ -35,4 +38,6 @@ export function sitDown(seatId: string) {
       memberSeatsSheet.deleteRow(index + 2);
     });
   memberSeatsSheet.appendRow(makeRowContents(memberSeat, columnNames));
+
+  lock.releaseLock();
 }
