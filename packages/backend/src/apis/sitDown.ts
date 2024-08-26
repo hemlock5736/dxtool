@@ -1,6 +1,6 @@
 import { MemberSeat } from "../types/MemberSeat";
 import { Seat } from "../types/Seat";
-import { getMemberSeatRecords } from "../utils/getMemberSeatRecords";
+import { getRecords } from "../utils/getRecords";
 import { makeRowContents } from "../utils/makeRowContents";
 import { getEmail } from "./getEmail";
 import { getSeats } from "./getSeats";
@@ -15,7 +15,8 @@ export function sitDown(seatId: string) {
 
   const email = getEmail();
   const seats = getSeats();
-  const [memberSeatRecords, columnNames] = getMemberSeatRecords();
+  const [memberSeatRecords, columnNames] =
+    getRecords<MemberSeat>("memberSeats");
 
   const memberSeat: MemberSeat = { email, seatId };
   const isConference = (seat: Seat) => seat.category === "conference";

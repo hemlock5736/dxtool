@@ -1,4 +1,5 @@
-import { getMemberSeatRecords } from "../utils/getMemberSeatRecords";
+import { MemberSeat } from "../types/MemberSeat";
+import { getRecords } from "../utils/getRecords";
 import { getEmail } from "./getEmail";
 
 export function leaveSeat(seatId: string) {
@@ -10,7 +11,7 @@ export function leaveSeat(seatId: string) {
   lock.waitLock(30000);
 
   const email = getEmail();
-  const [memberSeatRecords] = getMemberSeatRecords();
+  const [memberSeatRecords] = getRecords<MemberSeat>("memberSeats");
 
   memberSeatRecords
     .map((memberSeatRecord, i) => ({
