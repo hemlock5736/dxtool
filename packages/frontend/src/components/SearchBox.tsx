@@ -1,10 +1,8 @@
 import { useContext, useState } from "react";
-import { FilteredSeatIdsContext } from "../contexts/filteredSeatIds/FilteredSeatIdsContext";
 import { SeatingContext } from "../contexts/seating/SeatingContext";
 
 export const SearchBox = () => {
-  const { seatingState } = useContext(SeatingContext);
-  const [, filteredSeatIdsDispatch] = useContext(FilteredSeatIdsContext);
+  const { seatingDispatch } = useContext(SeatingContext);
 
   const [text, setText] = useState("");
 
@@ -14,12 +12,9 @@ export const SearchBox = () => {
 
   const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    filteredSeatIdsDispatch({
+    seatingDispatch({
       type: "filter",
       text,
-      seats: seatingState.seats,
-      members: seatingState.members,
-      memberSeats: seatingState.memberSeats,
     });
   };
 

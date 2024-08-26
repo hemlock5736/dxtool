@@ -1,9 +1,11 @@
+import { category } from "../../../constants/category";
 import { Members } from "@google-apps-script/shared/types/Member";
 import { Seat, Seats } from "@google-apps-script/shared/types/Seat";
 import {
   MemberSeat,
   MemberSeats,
 } from "@google-apps-script/shared/types/MemberSeat";
+import { match } from "../../../utils/match";
 
 export type CoreSeatingState = {
   members: Members;
@@ -14,6 +16,7 @@ export type CoreSeatingState = {
 
 export type SeatingState = CoreSeatingState & {
   loaded: { [key in keyof CoreSeatingState]: boolean };
+  filteredSeatIds: string[];
 };
 
 export const initialSeatingState: SeatingState = {
@@ -27,6 +30,7 @@ export const initialSeatingState: SeatingState = {
     memberSeats: false,
     email: false,
   },
+  filteredSeatIds: [],
 };
 
 export type SeatingAction =
@@ -36,7 +40,8 @@ export type SeatingAction =
       value: CoreSeatingState[keyof CoreSeatingState];
     }
   | { type: "sitDown"; email: string; seatId: string }
-  | { type: "leaveSeat"; email: string; seatId: string };
+  | { type: "leaveSeat"; email: string; seatId: string }
+  | { type: "filter"; text: string };
 
 export const seatingReducer = (
   state: SeatingState,
@@ -86,6 +91,35 @@ export const seatingReducer = (
         ...state,
         memberSeats: [...memberSeats, memberSeat],
       };
+    }
+    case "filter": {
+      const text = action.text;
+      if (text === "") {
+        return {
+          ...state,
+          filteredSeatIds: Object.values(state.seats).map((seat) => seat.id),
+        };
+      }
+      const seatdIds = Object.values(state.seats)
+        .filter(
+          (seat) =>
+            match(text, seat.id) || match(text, category[seat.category]),
+        )
+        .map((seat) => seat.id);
+      const emails = Object.values(state.members)
+        .filter(
+          (member) =>
+            match(text, member.name) ||
+            match(text, member.nameKana) ||
+            match(text, member.department) ||
+            match(text, member.position),
+        )
+        .map((member) => member.email);
+      const seatIdsFromEmails = state.memberSeats
+        .filter((memberSeat) => emails.includes(memberSeat.email))
+        .map((memberSeat) => memberSeat.seatId);
+      const filteredSeatIds = [...new Set([...seatdIds, ...seatIdsFromEmails])];
+      return { ...state, filteredSeatIds };
     }
   }
 };

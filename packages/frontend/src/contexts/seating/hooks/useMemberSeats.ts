@@ -3,7 +3,7 @@ import { MemberSeats } from "@google-apps-script/shared/types/MemberSeat";
 import { SeatingAction } from "../reducers/seatingReducer";
 import { GasContext } from "../../gas/GasContext";
 
-export const useSeatings = (dispatch: Dispatch<SeatingAction>) => {
+export const useMemberSeats = (dispatch: Dispatch<SeatingAction>) => {
   const { serverFunctions } = useContext(GasContext);
 
   useEffect(() => {

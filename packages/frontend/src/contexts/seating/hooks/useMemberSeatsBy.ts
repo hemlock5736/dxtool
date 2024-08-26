@@ -12,7 +12,7 @@ export const initialMemberSeatsBy: MemberSeatsBy = {
   email: {},
 };
 
-export const useSeatingsBy = (memberSeats: MemberSeats): MemberSeatsBy => {
+export const useMemberSeatsBy = (memberSeats: MemberSeats): MemberSeatsBy => {
   const seatingsBySeatId = useMemo(
     () => fromManyToMany(memberSeats, "seatId", "email"),
     [memberSeats],
