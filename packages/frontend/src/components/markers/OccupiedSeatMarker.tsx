@@ -2,7 +2,7 @@ import { FC, ReactNode } from "react";
 import { Marker } from "react-leaflet";
 import { ColorMarker } from "../../leaflet/ColorMarker";
 import { Seat } from "@google-apps-script/shared/types/Seat";
-import { categoryColor } from "../../utils/colors";
+import { categoryColor } from "../../constants/colors";
 
 type OccupiedSeatMarkerProps = {
   seat: Seat;

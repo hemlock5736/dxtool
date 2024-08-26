@@ -3,7 +3,7 @@ import icon from "leaflet/dist/images/marker-icon.png";
 import retinaIcon from "leaflet/dist/images/marker-icon-2x.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
 import { Color } from "../types/Color";
-import { colorHue } from "../utils/colors";
+import { colorHue } from "../constants/colors";
 
 export const ColorMarker = (color: Color = "blue") => {
   return L.icon({
