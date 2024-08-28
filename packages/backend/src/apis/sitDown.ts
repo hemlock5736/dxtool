@@ -5,7 +5,7 @@ import { makeRowContents } from "../utils/makeRowContents";
 import { getEmail } from "./getEmail";
 import { getSeats } from "./getSeats";
 
-export function sitDown(seatId: string) {
+export const sitDown = (seatId: string) => {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const memberSeatsSheet = ss.getSheetByName("memberSeats");
   if (!memberSeatsSheet) return;
@@ -41,4 +41,4 @@ export function sitDown(seatId: string) {
   memberSeatsSheet.appendRow(makeRowContents(memberSeat, columnNames));
 
   lock.releaseLock();
-}
+};

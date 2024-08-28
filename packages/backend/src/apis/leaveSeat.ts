@@ -2,7 +2,7 @@ import { MemberSeat } from "../types/MemberSeat";
 import { getRecords } from "../utils/getRecords";
 import { getEmail } from "./getEmail";
 
-export function leaveSeat(seatId: string) {
+export const leaveSeat = (seatId: string) => {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const memberSeatsSheet = ss.getSheetByName("memberSeats");
   if (!memberSeatsSheet) return;
@@ -29,4 +29,4 @@ export function leaveSeat(seatId: string) {
     });
 
   lock.releaseLock();
-}
+};

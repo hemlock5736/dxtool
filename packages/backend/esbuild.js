@@ -1,13 +1,32 @@
 import esbuild from "esbuild";
-import { GasPlugin } from "esbuild-gas-plugin";
+import fs from "fs";
+import path from "path";
+
+function removeExportPlugin() {
+  return {
+    name: "remove-export-plugin",
+    setup(build) {
+      build.onEnd((result) => {
+        result.outputFiles?.forEach((file) => {
+          file.contents = file.text
+            .replace(/export\s*\{\s*[^}]*\s*\};/, "")
+            .trim();
+          fs.mkdirSync(path.dirname(file.path), { recursive: true });
+          fs.writeFileSync(file.path, file.contents);
+        });
+      });
+    },
+  };
+}
 
 esbuild
   .build({
-    entryPoints: ["src/index.ts"],
     bundle: true,
-    minify: true,
+    entryPoints: ["src/index.ts"],
+    format: "esm",
     outfile: "build/index.js",
-    plugins: [GasPlugin],
+    plugins: [removeExportPlugin()],
+    write: false,
   })
   .catch((e) => {
     console.error(e);

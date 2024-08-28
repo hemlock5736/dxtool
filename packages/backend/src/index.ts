@@ -1,13 +1,6 @@
-import { getEmail } from "./apis/getEmail";
-import { getMembers } from "./apis/getMembers";
-import { getMemberSeats } from "./apis/getMemberSeats";
-import { getSeats } from "./apis/getSeats";
-import { leaveSeat } from "./apis/leaveSeat";
-import { sitDown } from "./apis/sitDown";
-
-global.getEmail = getEmail;
-global.getMembers = getMembers;
-global.getMemberSeats = getMemberSeats;
-global.getSeats = getSeats;
-global.leaveSeat = leaveSeat;
-global.sitDown = sitDown;
+export * from "./apis/getEmail";
+export * from "./apis/getMembers";
+export * from "./apis/getMemberSeats";
+export * from "./apis/getSeats";
+export * from "./apis/leaveSeat";
+export * from "./apis/sitDown";
